@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- Properties -->
+     <xacro:property name="base_lx" value="0.5" />
+     <xacro:property name="base_ly" value="0.5" />
+     <xacro:property name="base_lz" value="0.2" />
+    
+    <link name="base_footprint" />
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="${base_lx} ${base_ly} ${base_lz}"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </visual>
+        
+        <!-- Todo collision -->
+        <!-- todo Inertial -->
+    </link>
+    
+    <joint name="base_footprint_joint" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+        <origin xyz="0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    </joint>
+    
+</robot>

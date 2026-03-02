@@ -1,0 +1,16 @@
+{
+    "ROS2.distro": "jazzy",
+    "python.autoComplete.extraPaths": [
+        "/home/zeyadcode/ros2_ws/build/my_robot_test",
+        "/home/zeyadcode/ros2_ws/install/my_robot_test/lib/python3.12/site-packages",
+        "/home/zeyadcode/ros2_ws/install/my_robot_interface/lib/python3.12/site-packages",
+        "/opt/ros/jazzy/lib/python3.12/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/zeyadcode/ros2_ws/build/my_robot_test",
+        "/home/zeyadcode/ros2_ws/install/my_robot_test/lib/python3.12/site-packages",
+        "/home/zeyadcode/ros2_ws/install/my_robot_interface/lib/python3.12/site-packages",
+        "/opt/ros/jazzy/lib/python3.12/site-packages"
+    ],
+    "cmake.ignoreCMakeListsMissing": true
+}
