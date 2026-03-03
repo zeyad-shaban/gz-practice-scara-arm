@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="box_inertial" params="m lx ly lz o_xyz o_rpy">
+        <inertial>
+            <origin xyz="${o_xyz}" o_rpy="${o_rpy}"/>
+            <mass value="${m}" />
+            <inertia ixx="${1/12 * m * (ly**2 + lz**2)}" ixy="0" ixz="0"
+                iyy="${1/12 * m * (lx**2 + lz**2)}" iyz="0" izz="${1/12 * m * (lx**2 + ly**2)}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="solid_cylinder_inertial" params="m r l o_xyz o_rpy">
+        <inertial>
+            <origin xyz="${o_xyz}" o_rpy="${o_rpy}"/>
+            <mass value="${m}" />
+            <inertia ixx="${1/12 * m * (3 * r**2 + l**2)}" ixy="0" ixz="0"
+                iyy="${1/12 * m * (3 * r**2 + l**2)}" iyz="0" izz="${1/2 * m * r**2}" />
+        </inertial>
+    </xacro:macro>
+
+    <!-- For the vaccum sucker later on -->
+    <xacro:macro name="hollow_cylinder_inertial" params="m r1 r2 l o_xyz o_rpy">
+        <inertial>
+            <origin xyz="${o_xyz}" o_rpy="${o_rpy}"/>
+            <mass value="${m}" />
+            <inertia ixx="${1/12 * m * (3 * (r1**2 + r2**2) + l**2)}" ixy="0" ixz="0"
+                iyy="${1/12 * m * (3 * (r1**2 + r2**2) + l**2)}" iyz="0"
+                izz="${1/2 * m * (r1**2 + r2**2)}" />
+        </inertial>
+    </xacro:macro>
+
+</robot>

@@ -5,30 +5,37 @@
     <xacro:property name="base_lx" value="0.5" />
     <xacro:property name="base_ly" value="0.5" />
     <xacro:property name="base_lz" value="0.2" />
+    <xacro:property name="base_mass" value="2" />
 
     <xacro:property name="column1_lx" value="0.2" />
     <xacro:property name="column1_ly" value="0.3" />
     <xacro:property name="column1_lz" value="0.7" />
-
+    <xacro:property name="column1_mass" value="1" />
+    
     <xacro:property name="carriage1_lx" value="0.1" />
     <xacro:property name="carriage1_ly" value="${column1_ly}" />
     <xacro:property name="carriage1_lz" value="0.15" />
-
+    <xacro:property name="carriage1_mass" value="0.7" />
+    
     <xacro:property name="shoulder_lx" value="0.55" />
     <xacro:property name="shoulder_ly" value="0.15" />
     <xacro:property name="shoulder_lz" value="0.1" />
-
+    <xacro:property name="shoulder_mass" value="0.5" />
+    
     <xacro:property name="elbow_lx" value="0.4" />
     <xacro:property name="elbow_ly" value="0.15" />
     <xacro:property name="elbow_lz" value="0.1" />
-    
+    <xacro:property name="elbow_mass" value="0.3" />
+
     <xacro:property name="ef_rad" value="0.05" />
     <xacro:property name="ef_len" value="0.1" />
+    <xacro:property name="ef_mass" value="0.1" />
 
 
     <!-- Base -->
     <link name="base_footprint" />
     <link name="base_link">
+        
         <visual>
             <geometry>
                 <box size="${base_lx} ${base_ly} ${base_lz}" />
@@ -36,8 +43,15 @@
             <origin xyz="0 0 0" rpy="0 0 0" />
             <material name="blue" />
         </visual>
-
-        <!-- Todo collision -->
+        
+        <collision>
+            <geometry>
+                <box size="${base_lx} ${base_ly} ${base_lz}" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </collision>
+        
+        <xacro:box_inertial m="${base_mass}" lx="${base_lx}" ly="${base_ly}" lz="${base_lz}" o_xyz="0 0 0" o_rpy="0 0 0" />
     </link>
 
     <joint name="footprint_base_joint" type="fixed">
@@ -48,6 +62,7 @@
 
     <!-- Column 1 link -->
     <link name="column1_link">
+        
         <visual>
             <geometry>
                 <box size="${column1_lx} ${column1_ly} ${column1_lz}" />
@@ -55,6 +70,16 @@
             <origin xyz="0 0 ${column1_lz / 2}" rpy="0 0 0" />
             <material name="red" />
         </visual>
+        
+        <collision>
+            <geometry>
+                <box size="${column1_lx} ${column1_ly} ${column1_lz}" />
+            </geometry>
+            <origin xyz="0 0 ${column1_lz / 2}" rpy="0 0 0" />
+        </collision>
+        
+        <xacro:box_inertial m="${column1_mass}" lx="${column1_lx}" ly="${column1_ly}" lz="${column1_lz}" o_xyz="0 0 ${column1_lz / 2}" o_rpy="0 0 0" />
+        
     </link>
 
     <joint name="base_column1_joint" type="fixed">
@@ -64,6 +89,7 @@
     </joint>
 
     <link name="carriage1_link">
+        
         <visual>
             <origin xyz="${carriage1_lx / 2} 0 0" rpy="0 0 0" />
             <geometry>
@@ -71,6 +97,16 @@
             </geometry>
             <material name="grey" />
         </visual>
+        
+        <collision>
+            <origin xyz="${carriage1_lx / 2} 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${carriage1_lx} ${carriage1_ly} ${carriage1_lz}" />
+            </geometry>
+        </collision>
+        
+        <xacro:box_inertial m="${carriage1_mass}" lx="${carriage1_lx}" ly="${carriage1_ly}" lz="${carriage1_lz}" o_xyz="${carriage1_lx / 2} 0 0" o_rpy="0 0 0" />
+        
     </link>
 
     <joint name="column1_carriage1_joint" type="prismatic">
@@ -84,13 +120,24 @@
 
     <!-- Shoulder -->
     <link name="shoulder_link">
+        
         <visual>
+            <origin xyz="${shoulder_lx / 2} 0 0" rpy="0 0 0" />
             <geometry>
                 <box size="${shoulder_lx} ${shoulder_ly} ${shoulder_lz}" />
             </geometry>
             <material name="yellow" />
-            <origin xyz="${shoulder_lx / 2} 0 0" rpy="0 0 0" />
         </visual>
+        
+        <collision>
+            <origin xyz="${shoulder_lx / 2} 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${shoulder_lx} ${shoulder_ly} ${shoulder_lz}" />
+            </geometry>
+        </collision>
+        
+        <xacro:box_inertial m="${shoulder_mass}" lx="${shoulder_lx}" ly="${shoulder_ly}" lz="${shoulder_lz}" o_xyz="${shoulder_lx / 2} 0 0" o_rpy="0 0 0" />
+        
     </link>
 
     <joint name="carriage1_shoulder_joint" type="revolute">
@@ -103,6 +150,7 @@
 
     <!-- Elbow -->
     <link name="elbow_link">
+        
         <visual>
             <geometry>
                 <box size="${elbow_lx} ${elbow_ly} ${elbow_lz}" />
@@ -110,6 +158,16 @@
             <origin xyz="${elbow_lx / 2} 0 0" rpy="0 0 0" />
             <material name="magenta" />
         </visual>
+        
+        <collision>
+            <geometry>
+                <box size="${elbow_lx} ${elbow_ly} ${elbow_lz}" />
+            </geometry>
+            <origin xyz="${elbow_lx / 2} 0 0" rpy="0 0 0" />
+        </collision>
+        
+        <xacro:box_inertial m="${elbow_mass}" lx="${elbow_lx}" ly="${elbow_ly}" lz="${elbow_lz}" o_xyz="${elbow_lx / 2} 0 0" o_rpy="0 0 0" />
+    
     </link>
 
     <joint name="shoulder_elbow_joint" type="revolute">
@@ -119,23 +177,33 @@
         <axis xyz="0 0 1" />
         <limit lower="${-pi * 0.9}" upper="${pi * 0.9}" effort="100" velocity="${pi}" />
     </joint>
-    
+
     <!-- End Effector -->
-     <link name="ef_link">
+    <link name="ef_link">
+        
         <visual>
             <geometry>
-                <cylinder radius="${ef_rad}" length="${ef_len}"/>
+                <cylinder radius="${ef_rad}" length="${ef_len}" />
             </geometry>
-            <origin xyz="0 0 -${ef_len / 2}" rpy="0 0 0"/>
+            <origin xyz="0 0 -${ef_len / 2}" rpy="0 0 0" />
             <material name="orange" />
         </visual>
-     </link>
-     
+        
+        <collision>
+            <geometry>
+                <cylinder radius="${ef_rad}" length="${ef_len}" />
+            </geometry>
+            <origin xyz="0 0 -${ef_len / 2}" rpy="0 0 0" />
+        </collision>
+        
+        <xacro:solid_cylinder_inertial m="${ef_mass}" r="${ef_rad}" l="${ef_len}" o_xyz="0 0 -${ef_len / 2}" o_rpy="0 0 0" />
+        
+    </link>
+
     <joint name="elbow_ef_joint" type="fixed">
-        <origin xyz="${elbow_lx - ef_rad} 0 -${ef_len / 2}" rpy="0.0 0.0 0.0"/>
-        <parent link="elbow_link"/>
-        <child link="ef_link"/>
+        <origin xyz="${elbow_lx - ef_rad} 0 -${ef_len / 2}" rpy="0.0 0.0 0.0" />
+        <parent link="elbow_link" />
+        <child link="ef_link" />
     </joint>
-    
-    <!-- Todo Gripper -->
+
 </robot>

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="scara">
-    <xacro:include filename="scara_core.xacro" />
+    <xacro:include filename="inertials.xacro" />
     <xacro:include filename="materials.xacro" />
+    <xacro:include filename="scara_core.xacro" />
 </robot>
