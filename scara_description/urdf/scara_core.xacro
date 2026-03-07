@@ -4,7 +4,7 @@
     <!-- Properties -->
     <xacro:property name="base_lx" value="0.5" />
     <xacro:property name="base_ly" value="0.5" />
-    <xacro:property name="base_lz" value="0.2" />
+    <xacro:property name="base_lz" value="0.35" />
     <xacro:property name="base_mass" value="16" />
 
     <xacro:property name="column1_lx" value="0.2" />

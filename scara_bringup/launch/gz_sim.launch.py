@@ -104,6 +104,6 @@ def generate_launch_description():
             package='rviz2',
             executable='rviz2',
             arguments=['-d', rviz_config_path],
-            condition=IfCondition(LaunchConfiguration('use_rviz'))
+            condition=IfCondition(use_rviz)
         )
     ])

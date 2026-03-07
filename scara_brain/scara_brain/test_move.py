@@ -7,6 +7,11 @@ from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from builtin_interfaces.msg import Duration
 from math import pi
 
+column1_min = 0.1
+column1_max = 0.7
+column1_baseline = 0.4
+column1_station_pick = 0.11
+
 
 class TestMove(Node):
     def __init__(self):
@@ -14,14 +19,19 @@ class TestMove(Node):
         self.get_logger().info(f"test_move Started")
         
         self.joint_names: list[str] = ['column1_carriage1_joint', 'carriage1_shoulder_joint', 'shoulder_elbow_joint']
-        self.checkpoints = {
-            'uav_exposure': JointTrajectoryPoint(
-                positions=[0.3, 0.8, -0.5],
-                time_from_start=Duration(sec=2)
+        
+        self.station_checkpoints = {
+            'station_uv': JointTrajectoryPoint(
+                positions=[column1_station_pick, pi*0.43, -pi*0.60],
+                time_from_start=Duration(sec=1)
             ),
-            'photoresist_spinner': JointTrajectoryPoint(
-                positions=[10.0, 10.0, 10.0],
-                time_from_start=Duration(sec=2)
+            'station_spinner': JointTrajectoryPoint(
+                positions=[column1_station_pick, 2.0, 0.8],
+                time_from_start=Duration(sec=1)
+            ),
+            'station_dev': JointTrajectoryPoint(
+                positions=[column1_station_pick, -2.0, -0.8],
+                time_from_start=Duration(sec=1)
             ),
         }
 
@@ -34,7 +44,7 @@ class TestMove(Node):
         # there was multi dof trajector that is interesting to look at 
         goal.trajectory.joint_names = self.joint_names
         
-        goal.trajectory.points = [self.checkpoints['photoresist_spinner']]
+        goal.trajectory.points = [self.station_checkpoints['station_uv']]
         
         fut = self.act_client.send_goal_async(goal, self.feedback_callback)
         fut.add_done_callback(self.goal_response_callback)
