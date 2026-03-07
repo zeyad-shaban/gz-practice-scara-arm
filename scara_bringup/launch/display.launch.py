@@ -17,7 +17,7 @@ from launch.substitutions import (
 
 
 def generate_launch_description():
-    scara_urdf_path = os.path.join(get_package_share_directory('scara_robot'), 'urdf', 'scara.urdf.xacro')
+    scara_urdf_path = os.path.join(get_package_share_directory('scara_description'), 'urdf', 'scara.urdf.xacro')
     rviz_config_path = os.path.join(get_package_share_directory('scara_bringup'), 'config', 'rviz_config.rviz')
     
     ld = LaunchDescription()

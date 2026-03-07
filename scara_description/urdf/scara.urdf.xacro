@@ -2,5 +2,8 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="scara">
     <xacro:include filename="inertials.xacro" />
     <xacro:include filename="materials.xacro" />
+    
     <xacro:include filename="scara_core.xacro" />
+    <xacro:include filename="scara.ros2_control.xacro" />
+    <xacro:include filename="gz_plugins.xacro" />
 </robot>
