@@ -24,7 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'test_move = scara_brain.test_move:main'
+            'brain_node = scara_brain.brain_node:main'
         ],
     },
 )
