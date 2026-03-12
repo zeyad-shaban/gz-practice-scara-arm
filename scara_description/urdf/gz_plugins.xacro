@@ -6,5 +6,20 @@
             <parameters>$(find scara_bringup)/config/controllers.yaml</parameters>
         </plugin>
     </gazebo>
+        
+    <gazebo reference="elbow_ef_joint">
+        <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+    
+    <gazebo>  
+        <plugin filename="gz-sim-detachable-joint-system"  
+                name="gz::sim::systems::DetachableJoint">  
+            <parent_link>ef_link</parent_link>  
+            <child_model>wafer</child_model>  
+            <child_link>wafer_link</child_link>  
+            <attach_topic>/vacuum/attach</attach_topic>  
+            <detach_topic>/vacuum/detach</detach_topic>  
+        </plugin>  
+    </gazebo>
 
 </robot>
