@@ -35,7 +35,6 @@
     <xacro:property name="camera_ly" value="0.02" />
     <xacro:property name="camera_lz" value="0.02" />
 
-
     <!-- Base -->
     <link name="base_footprint" />
     
@@ -213,7 +212,7 @@
     
     <link name="camera_link">
         <visual>
-            <origin xyz="${camera_lx / 2} 0 0" rpy="0 0 0"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
                 <box size="${camera_lx} ${camera_ly} ${camera_lz}"/>
             </geometry>
@@ -221,9 +220,9 @@
         </visual>
     </link>
     
-    <joint name="elbow_camera_joint" type="fixed">
-        <origin xyz="${elbow_lx} 0 0" rpy="0 ${pi/2} 0"/>
-        <parent link="elbow_link"/>
+    <joint name="ef_camera_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+        <parent link="ef_link"/>
         <child link="camera_link"/>
     </joint>
 
