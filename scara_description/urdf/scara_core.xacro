@@ -30,6 +30,10 @@
     <xacro:property name="ef_rad" value="0.05" />
     <xacro:property name="ef_len" value="0.1" />
     <xacro:property name="ef_mass" value="0.1" />
+    
+    <xacro:property name="camera_lx" value="0.02" />
+    <xacro:property name="camera_ly" value="0.02" />
+    <xacro:property name="camera_lz" value="0.02" />
 
 
     <!-- Base -->
@@ -205,6 +209,22 @@
         <origin xyz="${elbow_lx - ef_rad} 0 -${ef_len / 2}" rpy="0.0 0.0 0.0" />
         <parent link="elbow_link" />
         <child link="ef_link" />
+    </joint>
+    
+    <link name="camera_link">
+        <visual>
+            <origin xyz="${camera_lx / 2} 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="${camera_lx} ${camera_ly} ${camera_lz}"/>
+            </geometry>
+            <material name="black" />
+        </visual>
+    </link>
+    
+    <joint name="elbow_camera_joint" type="fixed">
+        <origin xyz="${elbow_lx} 0 0" rpy="0 ${pi/2} 0"/>
+        <parent link="elbow_link"/>
+        <child link="camera_link"/>
     </joint>
 
 </robot>
