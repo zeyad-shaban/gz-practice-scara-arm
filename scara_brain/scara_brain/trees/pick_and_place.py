@@ -4,6 +4,7 @@ from rclpy.logging import RcutilsLogger
 from scara_brain.modules.station import Station
 from py_trees.composites import Sequence, Selector
 from scara_brain.behaviours.movement import MoveToStation
+from scara_brain.behaviours.waiting import WaitingBehaviour
 
 def create_root(stations: list[Station], act_client: ActionClient, logger: RcutilsLogger):
     root = Sequence(name="Pick And Place", memory=True)
@@ -25,6 +26,6 @@ def create_root(stations: list[Station], act_client: ActionClient, logger: Rcuti
         # later on: drop
         
         root.add_child(MoveToStation(f"Go This {station.name} Mid Dropped", station, True, act_client, logger))
-        # root.add_child(WaitingBehavior...)
+        root.add_child(WaitingBehaviour(f"Waiting {station.name} [{station.running_time} secs]", station.running_time, logger))
         
     return root

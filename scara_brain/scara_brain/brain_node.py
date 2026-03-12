@@ -20,11 +20,11 @@ class BrainNode(Node):
         self.joint_names: list[str] = ['column1_carriage1_joint', 'carriage1_shoulder_joint', 'shoulder_elbow_joint']
         
         self.stations: list[Station] = [
-            Station('wafer_stack', mid_height=0.4, pick_height=0.11, pos_shoulder=0.848230, pos_elbow=0.452389, running_time=0),
-            Station('spinner', mid_height=0.4, pick_height=0.11, pos_shoulder=2.261947, pos_elbow=0, running_time=5),
-            Station('dlp_microscope', mid_height=0.4, pick_height=0.11, pos_shoulder=2.827433, pos_elbow=0.678584, running_time=5),
-            Station('dev', mid_height=0.4, pick_height=0.11, pos_shoulder=-2.375044, pos_elbow=0.508938, running_time=5),
-            Station('inspection', mid_height=0.4, pick_height=0.11, pos_shoulder=-1.300619, pos_elbow=1.074425, running_time=5),
+            Station('wafer_stack',    mid_height=0.4, pick_height=0.11, pos_shoulder=0.848230, pos_elbow=0.4523890, running_time=0),
+            Station('spinner',        mid_height=0.4, pick_height=0.11, pos_shoulder=2.261947, pos_elbow=0.0000000, running_time=5),
+            Station('dlp_microscope', mid_height=0.4, pick_height=0.11, pos_shoulder=2.827433, pos_elbow=0.6785840, running_time=5),
+            Station('dev',            mid_height=0.4, pick_height=0.11, pos_shoulder=-2.375044, pos_elbow=0.508938, running_time=5),
+            Station('inspection',     mid_height=0.4, pick_height=0.11, pos_shoulder=-1.300619, pos_elbow=1.074425, running_time=5),
         ]
         
         self.curr_station_idx = 0
