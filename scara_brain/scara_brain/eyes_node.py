@@ -3,9 +3,11 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 import cv2
-from scara_brain.modules.cv_utils import imgmsg_to_cv2, draw_crosshair
+from scara_brain.utils.cv_utils import imgmsg_to_cv2, draw_crosshair
 import numpy as np
 from geometry_msgs.msg import Vector3
+
+WAFER_RADIUS_METERS = 0.05 # meters
 
 class EyesNode(Node):
     def __init__(self):
@@ -16,7 +18,7 @@ class EyesNode(Node):
         self.show_debug_img = self.get_parameter('show_debug_img').value
         
         self.img_sub = self.create_subscription(Image, '/camera/image', self.image_callback, 10)
-        self.alignment_pub = self.create_publisher(Vector3, 'alignment_vec', 10)
+        self.alignment_pub = self.create_publisher(Vector3, 'wafer_align_vec', 10)
         
     def image_callback(self, msg: Image):
         frame = imgmsg_to_cv2(msg)
@@ -40,17 +42,19 @@ class EyesNode(Node):
         
         if circles is not None:
             circles = np.uint16(np.around(circles)) # type: ignore
-            cx_wafer, cy_wafer, r = circles[0][0]  # best circle
+            cx_wafer, cy_wafer, radius_px = circles[0][0]  # best circle
             
-            alignment_vec = Vector3()
-            alignment_vec.x = float(cx_img) - float(cx_wafer)
-            alignment_vec.y = float(cy_img) - float(cy_wafer)
-            alignment_vec.z = 0.0
+            align_vec_px = np.array([cx_img - cx_wafer, cy_img - cy_wafer], dtype=np.float64)
+            align_vec_meters = align_vec_px * (WAFER_RADIUS_METERS / radius_px)
             
-            self.alignment_pub.publish(alignment_vec)
+            align_vec_msg = Vector3()
+            align_vec_msg.x = align_vec_meters[0]
+            align_vec_msg.y = align_vec_meters[1]
+            align_vec_msg.z = 0.0
+            self.alignment_pub.publish(align_vec_msg)
             
             if result_img is not None:
-                cv2.circle(result_img, (cx_wafer, cy_wafer), r, (255, 0, 0), 2)
+                cv2.circle(result_img, (cx_wafer, cy_wafer), radius_px, (255, 0, 0), 2)
                 draw_crosshair(result_img, cx_wafer, cy_wafer, size=3, color=(0, 255, 0), thickness=1)
         
         if result_img is not None:

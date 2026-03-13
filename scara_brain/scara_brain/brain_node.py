@@ -7,7 +7,7 @@ from math import pi
 from scara_brain.modules.station import Station
 from scara_brain.trees import pick_and_place
 from std_msgs.msg import Empty
-
+import numpy as np
 
 class BrainNode(Node):
     def __init__(self):
