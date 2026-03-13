@@ -168,7 +168,6 @@ class GoUp(py_trees.behaviour.Behaviour):
         
         shoulder_pos = get_joint_pos(msg,SHOULDER_JOINT_NAME)
         elbow_pos = get_joint_pos(msg, ELBOW_JOINT_NAME)
-        self.joint_sub.destroy()
         
         self._wait_for_act_server()
         
