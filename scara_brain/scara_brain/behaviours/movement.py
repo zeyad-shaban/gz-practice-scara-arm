@@ -15,6 +15,14 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 from builtin_interfaces.msg import Duration
 
 
+
+# todo put those in better po
+SHOULDER_JOINT_NAME =  'carriage1_shoulder_joint'
+ELBOW_JOINT_NAME =  'shoulder_elbow_joint'
+CARRAIGE_JOINT_NAME = 'column1_carriage1_joint'
+MOVEMENT_DURATION = 1
+
+
 class MoveToStation(py_trees.behaviour.Behaviour):
     def __init__(self, name: str, station: Station, is_mid: bool, act_client: ActionClient, logger: RcutilsLogger):
         super().__init__(name)
@@ -64,12 +72,136 @@ class MoveToStation(py_trees.behaviour.Behaviour):
         while not self.act_client.wait_for_server(1):
             self.logger.info("Waiting for action client...")
             
-class AlignmentBehaviour(py_trees.behaviour.Behaviour):
-    SHOULDER_JOINT_NAME =  'carriage1_shoulder_joint'
-    ELBOW_JOINT_NAME =  'shoulder_elbow_joint'
-    CARRAIGE_JOINT_NAME = 'column1_carriage1_joint'
-    MOVEMENT_DURATION = 1
+class GoDown(py_trees.behaviour.Behaviour):
+    def __init__(self, name: str, node: Node, station: Station, act_client):
+        super().__init__(name)
+        
+        self.node = node
+        self._act_client = act_client
+        self._station = station
+        
+        self._result = None
     
+    def initialise(self) -> None:
+        self.node.get_logger().info(f"Starting {self.name}...")
+        self.joint_sub = self.node.create_subscription(JointState, '/joint_states', self._joint_states_callback, 10)
+    
+    def update(self):
+        if self._result is None:
+            return Status.RUNNING
+            
+        return Status.SUCCESS
+            
+        
+    def _joint_states_callback(self, msg: JointState):
+        shoulder_pos = get_joint_pos(msg,SHOULDER_JOINT_NAME)
+        elbow_pos = get_joint_pos(msg, ELBOW_JOINT_NAME)
+        self.joint_sub.destroy()
+        
+        self._wait_for_act_server()
+        
+        goal = FollowJointTrajectory.Goal()
+        goal.trajectory.joint_names = [CARRAIGE_JOINT_NAME, SHOULDER_JOINT_NAME, ELBOW_JOINT_NAME]
+        
+        goal.trajectory.points = [JointTrajectoryPoint(
+            positions=[self._station.pick_height, shoulder_pos, elbow_pos],
+            time_from_start=Duration(sec=MOVEMENT_DURATION)
+        )]
+        
+        goal.goal_tolerance = [JointTolerance(name=name, position=0.01) for name in Station.joint_names]
+        # goal.goal_time_tolerance = Duration(sec=2)
+        
+        fut = self._act_client.send_goal_async(goal)
+        fut.add_done_callback(self._goal_response_cb)
+        
+        self.node.get_logger().info(f"Starting alignment movement")
+        
+    def _goal_response_cb(self, fut):
+        goal_handle: ClientGoalHandle = fut.result()
+        
+        if not goal_handle.accepted:
+            self.node.get_logger().warning("Goal rejected...") # todo make this a failure
+            return
+        
+        result_fut = goal_handle.get_result_async()
+        result_fut.add_done_callback(self._result_cb)
+        
+    def _result_cb(self, fut):
+        self._result = fut.result()
+        
+        
+        
+    def _wait_for_act_server(self):
+        while not self._act_client.wait_for_server(1):
+            self.logger.info("Waiting for action client...")
+        
+        
+class GoUp(py_trees.behaviour.Behaviour):
+    def __init__(self, name: str, node: Node, station: Station, act_client):
+        super().__init__(name)
+        
+        self.node = node
+        self._act_client = act_client
+        self._station = station
+        
+        self._result = None
+    
+    def initialise(self) -> None:
+        self.node.get_logger().info(f"Starting {self.name}...")
+        self.joint_sub = self.node.create_subscription(JointState, '/joint_states', self._joint_states_callback, 10)
+    
+    def update(self):
+        if self._result is None:
+            return Status.RUNNING
+            
+        return Status.SUCCESS
+            
+        
+    def _joint_states_callback(self, msg: JointState):
+        shoulder_pos = get_joint_pos(msg,SHOULDER_JOINT_NAME)
+        elbow_pos = get_joint_pos(msg, ELBOW_JOINT_NAME)
+        self.joint_sub.destroy()
+        
+        self._wait_for_act_server()
+        
+        goal = FollowJointTrajectory.Goal()
+        goal.trajectory.joint_names = [CARRAIGE_JOINT_NAME, SHOULDER_JOINT_NAME, ELBOW_JOINT_NAME]
+        
+        goal.trajectory.points = [JointTrajectoryPoint(
+            positions=[self._station.mid_height, shoulder_pos, elbow_pos],
+            time_from_start=Duration(sec=MOVEMENT_DURATION)
+        )]
+        
+        goal.goal_tolerance = [JointTolerance(name=name, position=0.01) for name in Station.joint_names]
+        # goal.goal_time_tolerance = Duration(sec=2)
+        
+        fut = self._act_client.send_goal_async(goal)
+        fut.add_done_callback(self._goal_response_cb)
+        
+        self.node.get_logger().info(f"Starting alignment movement")
+        
+    def _goal_response_cb(self, fut):
+        goal_handle: ClientGoalHandle = fut.result()
+        
+        if not goal_handle.accepted:
+            self.node.get_logger().warning("Goal rejected...") # todo make this a failure
+            return
+        
+        result_fut = goal_handle.get_result_async()
+        result_fut.add_done_callback(self._result_cb)
+        
+    def _result_cb(self, fut):
+        self._result = fut.result()
+        
+        
+        
+    def _wait_for_act_server(self):
+        while not self._act_client.wait_for_server(1):
+            self.logger.info("Waiting for action client...")
+        
+        
+            
+class AlignmentBehaviour(py_trees.behaviour.Behaviour):
     def __init__(self, name, node: Node, act_client, allowed_thresh_meters=0.01):
         super().__init__(name)
         
@@ -110,9 +242,9 @@ class AlignmentBehaviour(py_trees.behaviour.Behaviour):
         return Status.RUNNING
         
     def _joint_states_callback(self, msg: JointState):
-        self._shoulder_pos = get_joint_pos(msg,self.SHOULDER_JOINT_NAME)
-        self._elbow_pos = get_joint_pos(msg, self.ELBOW_JOINT_NAME)
-        self._z_pos = get_joint_pos(msg, self.CARRAIGE_JOINT_NAME)
+        self._shoulder_pos = get_joint_pos(msg,SHOULDER_JOINT_NAME)
+        self._elbow_pos = get_joint_pos(msg, ELBOW_JOINT_NAME)
+        self._z_pos = get_joint_pos(msg, CARRAIGE_JOINT_NAME)
         
     def _align_vec_callback(self, msg: Vector3):
         self._dx, self._dy = msg.x, msg.y
@@ -125,11 +257,11 @@ class AlignmentBehaviour(py_trees.behaviour.Behaviour):
         self._wait_for_act_server()
         
         goal = FollowJointTrajectory.Goal()
-        goal.trajectory.joint_names = [self.CARRAIGE_JOINT_NAME, self.SHOULDER_JOINT_NAME, self.ELBOW_JOINT_NAME]
+        goal.trajectory.joint_names = [CARRAIGE_JOINT_NAME, SHOULDER_JOINT_NAME, ELBOW_JOINT_NAME]
         
         goal.trajectory.points = [JointTrajectoryPoint(
             positions=[self._z_pos, new_shoulder, new_elbow],
-            time_from_start=Duration(sec=self.MOVEMENT_DURATION)
+            time_from_start=Duration(sec=MOVEMENT_DURATION)
         )]
         
         goal.goal_tolerance = [JointTolerance(name=name, position=0.01) for name in Station.joint_names]
