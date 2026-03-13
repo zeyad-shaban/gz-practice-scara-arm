@@ -13,7 +13,7 @@ class EyesNode(Node):
         self.get_logger().info(f"eyes_node Started")
 
         self.declare_parameter('show_debug_img', True)
-        self.show_debug_img = self.get_parameter('show_debug_img')
+        self.show_debug_img = self.get_parameter('show_debug_img').value
         
         self.img_sub = self.create_subscription(Image, '/camera/image', self.image_callback, 10)
         self.alignment_pub = self.create_publisher(Vector3, 'alignment_vec', 10)

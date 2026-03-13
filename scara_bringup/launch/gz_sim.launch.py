@@ -17,6 +17,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
     gz_args = LaunchConfiguration('gz_args', default='')
     use_rviz = LaunchConfiguration('use_rviz', default='false')
+    show_eye_debug_img = LaunchConfiguration('show_eye_debug_img', default='false')
     
 
     # Get URDF via xacro
@@ -63,6 +64,12 @@ def generate_launch_description():
             robot_controllers,
         ],
     )
+    
+    eyes_node = Node(
+        package='scara_brain',
+        executable='eyes_node',
+        parameters=[{'show_debug_img': show_eye_debug_img}]
+    )
 
     bridge = Node(
         package='ros_gz_bridge',
@@ -94,6 +101,7 @@ def generate_launch_description():
         bridge,
         node_robot_state_publisher,
         gz_spawn_entity,
+        
         # Launch Arguments
         DeclareLaunchArgument(
             'use_sim_time',
@@ -105,5 +113,8 @@ def generate_launch_description():
             executable='rviz2',
             arguments=['-d', rviz_config_path],
             condition=IfCondition(use_rviz)
-        )
+        ),
+        
+        # my nodes
+        eyes_node,
     ])
