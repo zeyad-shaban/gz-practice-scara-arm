@@ -1,0 +1,4 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="stage">
+    <xacro:include filename="materials.xacro" />
+    <xacro:include filename="stage_core.xacro" />
+</robot>
