@@ -16,7 +16,7 @@
     <xacro:property name="x_stage_ly" value="0.15" />
     <xacro:property name="x_stage_lz" value="0.015" />
     <xacro:property name="x_stage_mass" value="0.1" />
-    <xacro:property name="x_stage_lower" value="0" />
+    <xacro:property name="x_stage_lower" value="-0.025" />
     <xacro:property name="x_stage_upper" value="0.025" />
 
 
@@ -24,7 +24,7 @@
     <xacro:property name="y_stage_ly" value="0.15" />
     <xacro:property name="y_stage_lz" value="0.015" />
     <xacro:property name="y_stage_mass" value="0.1" />
-    <xacro:property name="y_stage_lower" value="0" />
+    <xacro:property name="y_stage_lower" value="-0.025" />
     <xacro:property name="y_stage_upper" value="0.025" />
 
 
@@ -44,7 +44,7 @@
     <link name="base_link">
 
         <visual>
-            <origin xyz="0 ${base_lz/2} 0" rpy="0 0 0" />
+            <origin xyz="0 0 ${base_lz/2}" rpy="0 0 0" />
             <geometry>
                 <box size="${base_lx} ${base_ly} ${base_lz}" />
             </geometry>
@@ -52,14 +52,14 @@
         </visual>
 
         <collision>
-            <origin xyz="0 ${base_lz/2} 0" rpy="0 0 0" />
+            <origin xyz="0 0 ${base_lz/2}" rpy="0 0 0" />
             <geometry>
                 <box size="${base_lx} ${base_ly} ${base_lz}" />
             </geometry>
         </collision>
 
         <xacro:box_inertial lx="${base_lx}" ly="${base_ly}" lz="${base_lz}" m="${base_mass}"
-            o_xyz="0 ${base_lz/2} 0" o_rpy="0 0 0" />
+            o_xyz="0 0 ${base_lz/2}" o_rpy="0 0 0" />
 
     </link>
 
@@ -192,7 +192,7 @@
     </link>
 
     <joint name="y_z_stage_joint" type="prismatic">
-        <origin xyz="0 0 ${y_stage_lz}" rpy="0 0 0" />
+        <origin xyz="0 0 ${y_stage_lz  + -z_stage_lower}" rpy="0 0 0" />
         <parent link="y_stage_link" />
         <child link="z_stage_link" />
         <axis xyz="0 0 1" />

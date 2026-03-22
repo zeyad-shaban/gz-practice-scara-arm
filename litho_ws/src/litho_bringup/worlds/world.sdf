@@ -19,7 +19,7 @@
     </scene>
 
     <model name="wafer">
-      <pose>0 0 0.061 0 0 0</pose>
+      <pose>0 0 0.086 0 0 0</pose>
       <link name="wafer_link">
 
         <!-- Wafer body -->
