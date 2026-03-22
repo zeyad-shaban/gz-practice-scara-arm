@@ -26,12 +26,12 @@
     <xacro:property name="z_stage_ly" value="0.1" />
     <xacro:property name="z_stage_lz" value="0.01" />
     <xacro:property name="z_stage_mass" value="0.05" />
-    <xacro:property name="z_stage_lower" value="0" />
+    <xacro:property name="z_stage_lower" value="-0.025" />
     <xacro:property name="z_stage_upper" value="0.025" />
 
 
     <xacro:property name="stage_effort" value="100" /> <!-- N/m -->
-    <xacro:property name="stage_vel" value="0.005" /> <!-- m/s -->
+    <xacro:property name="stage_vel" value="0.1" /> <!-- m/s -->
 
     <!-- Base -->
     <link name="base_footprint" />

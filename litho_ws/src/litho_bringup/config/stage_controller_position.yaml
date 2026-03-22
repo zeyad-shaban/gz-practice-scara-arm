@@ -18,3 +18,7 @@ joint_trajectory_controller:
         state_interfaces:
             - position
             - velocity
+        gains:
+            # base_x_stage_joint: { p: 1000.0, i: 0.0, d: 50.0 }
+            # x_y_stage_joint: { p: 1000.0, i: 0.0, d: 50.0 }
+            # y_z_stage_joint: { p: 5000.0, i: 10.0, d: 100.0 }
