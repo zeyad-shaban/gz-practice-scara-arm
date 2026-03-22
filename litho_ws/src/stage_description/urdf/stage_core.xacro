@@ -6,6 +6,12 @@
     <xacro:property name="base_mass" value="10" />
 
 
+    <xacro:property name="camera_lx" value="0.03" />
+    <xacro:property name="camera_ly" value="0.01" />
+    <xacro:property name="camera_lz" value="0.01" />
+    <xacro:property name="camera_mass" value="0.05" />
+    <xacro:property name="camera_offset_z" value="0.05" />
+
     <xacro:property name="x_stage_lx" value="0.15" />
     <xacro:property name="x_stage_ly" value="0.15" />
     <xacro:property name="x_stage_lz" value="0.015" />
@@ -61,6 +67,36 @@
         <origin xyz="0 0 ${base_lz/2}" rpy="0 0 0" />
         <parent link="base_footprint" />
         <child link="base_link" />
+    </joint>
+
+    <!-- Camera -->
+    <link name="camera_link">
+
+        <visual>
+            <origin xyz="-${camera_lx/2} 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${camera_lx} ${camera_ly} ${camera_lz}" />
+            </geometry>
+            <material name="reddishgrey" />
+        </visual>
+
+        <collision>
+            <origin xyz="-${camera_lx/2} 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${camera_lx} ${camera_ly} ${camera_lz}" />
+            </geometry>
+        </collision>
+        
+        <xacro:box_inertial lx="${camera_lx}" ly="${camera_ly}" lz="${camera_lz}" m="${camera_mass}"
+            o_xyz="-${camera_lx/2} 0 0" o_rpy="0 0 0" />
+        
+    </link>
+
+    <joint name="base_camera_joint" type="fixed">
+        <origin xyz="0 0 ${base_lz/2 + x_stage_lz + y_stage_lz + z_stage_lz + camera_offset_z}"
+            rpy="0 ${pi/2} 0" />
+        <parent link="base_link" />
+        <child link="camera_link" />
     </joint>
 
     <!-- X Stage -->
