@@ -1,6 +1,7 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.actions import RegisterEventHandler
+from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
@@ -14,9 +15,12 @@ def generate_launch_description():
     # Launch Arguments
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
     gz_args = LaunchConfiguration('gz_args', default='')
+    use_rviz = LaunchConfiguration('use_rviz', default=False)
 
     # World Path
     world_sdf_path = PathJoinSubstitution([FindPackageShare('litho_bringup'), 'worlds', 'world.sdf'])
+    rviz_config_path = PathJoinSubstitution([FindPackageShare('litho_bringup'), 'config', 'stage_config.rviz'])
+    bridge_config_path = PathJoinSubstitution([FindPackageShare('litho_bringup'), 'config', 'bridge.yaml'])
     
     # Get URDF via xacro
     robot_description_content = Command(
@@ -60,6 +64,7 @@ def generate_launch_description():
         arguments=['joint_state_broadcaster',
                    ],
     )
+    
     joint_trajectory_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
@@ -69,12 +74,19 @@ def generate_launch_description():
             robot_controllers,
             ],
     )
-
-    # Bridge # todo modify this to acutally be in a yaml file
+    
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        output='screen',
+        arguments=['-d', rviz_config_path],
+        condition=IfCondition(use_rviz),
+    )
+        
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
+        parameters=[{'config_file': bridge_config_path}],
         output='screen'
     )
 
@@ -101,9 +113,8 @@ def generate_launch_description():
         bridge,
         node_robot_state_publisher,
         gz_spawn_entity,
+        rviz_node,
         # Launch Arguments
-        DeclareLaunchArgument(
-            'use_sim_time',
-            default_value=use_sim_time,
-            description='If true, use simulated clock'),
+        DeclareLaunchArgument( 'use_sim_time', default_value=use_sim_time, description='If true, use simulated clock'),
+        DeclareLaunchArgument('use_rviz', default_value='false', description='Launch RViz'),
     ])
