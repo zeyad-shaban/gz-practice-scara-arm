@@ -8,6 +8,7 @@ Panels:
         - /Status1
         - /RobotModel1
         - /TF1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 555
   - Class: rviz_common/Selection
@@ -49,7 +50,7 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 0.699999988079071
+    - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
       Description File: ""
@@ -81,6 +82,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        y_stage_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
@@ -95,14 +101,16 @@ Visualization Manager:
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
         base_footprint:
-          Value: true
+          Value: false
         base_link:
-          Value: true
+          Value: false
         x_stage_link:
           Value: true
-      Marker Scale: 0.5
+        y_stage_link:
+          Value: true
+      Marker Scale: 0.10000000149011612
       Name: TF
       Show Arrows: true
       Show Axes: true
@@ -111,7 +119,8 @@ Visualization Manager:
         base_footprint:
           base_link:
             x_stage_link:
-              {}
+              y_stage_link:
+                {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -160,7 +169,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 0.5698997974395752
+      Distance: 0.2993071675300598
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -175,10 +184,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.21479646861553192
+      Pitch: 0.28979620337486267
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 6.073580741882324
+      Yaw: 4.853586673736572
     Saved: ~
 Window Geometry:
   Displays:
@@ -196,5 +205,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 582
-  Y: -6
+  X: 594
+  Y: 22

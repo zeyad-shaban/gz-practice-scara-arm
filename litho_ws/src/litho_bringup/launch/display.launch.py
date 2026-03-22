@@ -13,14 +13,9 @@ def generate_launch_description():
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        emulate_tty=True,
+        # emulate_tty=True,
         parameters=[{'use_sim_time': True, 'robot_description': Command(['xacro ', robot_desc_path])}],
         output="screen"
-    )
-    
-    joint_state_publisher_node = Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
     )
     
     joint_state_publisher_gui_node = Node(
@@ -40,7 +35,6 @@ def generate_launch_description():
     return LaunchDescription(
         [            
             robot_state_publisher_node,
-            joint_state_publisher_node,
             joint_state_publisher_gui_node,
             rviz_node,
         ]

@@ -16,11 +16,23 @@
     <xacro:property name="z_stage_ly" value="0.1" />
     <xacro:property name="z_stage_lz" value="0.01" />
 
+    <xacro:property name="x_stage_lower" value="0" />
+    <xacro:property name="x_stage_upper" value="0.025" />
+
+    <xacro:property name="y_stage_lower" value="0" />
+    <xacro:property name="y_stage_upper" value="0.025" />
+
+    <xacro:property name="z_stage_lower" value="0" />
+    <xacro:property name="z_stage_upper" value="0.025" />
+
+    <xacro:property name="stage_effort" value="100" />
+    <xacro:property name="stage_vel" value="0.0001" />
+
     <!-- Base -->
     <link name="base_footprint" />
     <link name="base_link">
         <visual>
-            <origin xyz="0 0 0" rpy="0 0 0" />
+            <origin xyz="0 ${base_lz/2} 0" rpy="0 0 0" />
             <geometry>
                 <box size="${base_lx} ${base_ly} ${base_lz}" />
             </geometry>
@@ -29,7 +41,7 @@
     </link>
 
     <joint name="footprint_base_joint" type="fixed">
-        <origin xyz="0 0 ${base_lz / 2}" rpy="0 0 0" />
+        <origin xyz="0 0 ${base_lz/2}" rpy="0 0 0" />
         <parent link="base_footprint" />
         <child link="base_link" />
     </joint>
@@ -37,7 +49,7 @@
     <!-- X Stage -->
     <link name="x_stage_link">
         <visual>
-            <origin xyz="0 0 0" rpy="0 0 0" />
+            <origin xyz="0 0 ${x_stage_lz/2}" rpy="0 0 0" />
             <geometry>
                 <box size="${x_stage_lx} ${x_stage_ly} ${x_stage_lz}" />
             </geometry>
@@ -47,17 +59,18 @@
     </link>
 
     <joint name="base_x_stage_joint" type="prismatic">
-        <origin xyz="0 0 ${x_stage_lz / 2}" rpy="0 0 0" />
+        <origin xyz="0 0 ${base_lz/2}" rpy="0 0 0" />
         <parent link="base_link" />
         <child link="x_stage_link" />
         <axis xyz="1 0 0" />
-        <limit lower="0.0" upper="0.025" effort="100" velocity="0.1" />
+        <limit lower="${x_stage_lower}" upper="${x_stage_upper}" effort="${stage_effort}"
+            velocity="${stage_vel}" />
     </joint>
 
     <!-- Y Stage -->
     <link name="y_stage_link">
         <visual>
-            <origin xyz="0 0 0" rpy="0 0 0" />
+            <origin xyz="0 0 ${y_stage_lz/2}" rpy="0 0 0" />
             <geometry>
                 <box size="${y_stage_lx} ${y_stage_ly} ${y_stage_lz}" />
             </geometry>
@@ -67,17 +80,18 @@
     </link>
 
     <joint name="x_y_stage_joint" type="prismatic">
-        <origin xyz="0 0 ${y_stage_lz / 2}" rpy="0 0 0" />
+        <origin xyz="0 0 ${x_stage_lz}" rpy="0 0 0" />
         <parent link="x_stage_link" />
         <child link="y_stage_link" />
         <axis xyz="0 1 0" />
-        <limit lower="0.0" upper="0.025" effort="100" velocity="0.1" />
+        <limit lower="${y_stage_lower}" upper="${y_stage_upper}" effort="${stage_effort}"
+            velocity="${stage_vel}" />
     </joint>
 
     <!-- Z Stage -->
     <link name="z_stage_link">
         <visual>
-            <origin xyz="0 0 0" rpy="0 0 0" />
+            <origin xyz="0 0 ${z_stage_lz/2}" rpy="0 0 0" />
             <geometry>
                 <box size="${z_stage_lx} ${z_stage_ly} ${z_stage_lz}" />
             </geometry>
@@ -87,12 +101,12 @@
     </link>
 
     <joint name="y_z_stage_joint" type="prismatic">
-        <origin xyz="0 0 ${z_stage_lz / 2}" rpy="0 0 0" />
+        <origin xyz="0 0 ${y_stage_lz}" rpy="0 0 0" />
         <parent link="y_stage_link" />
         <child link="z_stage_link" />
         <axis xyz="0 0 1" />
-        <limit lower="0.0" upper="0.025" effort="100" velocity="0.1" />
+        <limit lower="${z_stage_lower}" upper="${z_stage_upper}" effort="${stage_effort}"
+            velocity="${stage_vel}" />
     </joint>
 
 </robot>
-

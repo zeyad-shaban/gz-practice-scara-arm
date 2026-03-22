@@ -9,5 +9,6 @@
         "/home/zeyadcode/scara_ws/build/scara_brain",
         "/home/zeyadcode/scara_ws/install/scara_brain/lib/python3.12/site-packages",
         "/opt/ros/jazzy/lib/python3.12/site-packages"
-    ]
+    ],
+    "cmake.sourceDirectory": "/home/zeyadcode/litho_ai/litho_ws/src/litho_bringup"
 }
