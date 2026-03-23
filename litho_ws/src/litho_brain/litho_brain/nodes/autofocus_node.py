@@ -27,8 +27,7 @@ class AutoFocusNode(Node):
             self._z_history = []
             self._sharpness_history = []
             
-            self._joint_sub = self.create_subscription(
-                JointState, '/joint_states', self._joint_cb, 10)
+            self._joint_sub = self.create_subscription( JointState, '/joint_states', self._joint_cb, 10)
             
             plt.ion()
             self._fig, self._ax = plt.subplots()
