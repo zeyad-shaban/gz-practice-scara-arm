@@ -37,7 +37,7 @@ class AutoFocusNode(Node):
             self._line, = self._ax.plot([], [], 'b.')
             
     def _joint_cb(self, msg: JointState):
-        idx = msg.name.index('y_z_stage_joint')
+        idx = msg.name.index('y_z_stage_joint') # type: ignore
         self._z_pos = msg.position[idx]
         
     def _img_callback(self, msg: Image):
