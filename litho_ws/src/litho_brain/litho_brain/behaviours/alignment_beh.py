@@ -10,7 +10,7 @@ from scipy.optimize import minimize_scalar
 from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
 import threading
-from litho_brain.constants import STAGE_JOINT_NAMES
+from litho_brain.constants import STAGE_JOINT_NAMES, STAGE_Z_BOUNDS
 import time
 
 class AutoFocusBeh(py_trees.behaviour.Behaviour):
@@ -95,7 +95,7 @@ class AutoFocusBeh(py_trees.behaviour.Behaviour):
     def _maximizer_worker(self):
         result = minimize_scalar(
             self._sharpness_at_z,
-            bounds=(-0.025, 0.025),
+            bounds=(-STAGE_Z_BOUNDS, STAGE_Z_BOUNDS),
             method='bounded',
             options={'maxiter': self._max_iter, 'xatol': self._tolerance_meters}
         )
@@ -118,7 +118,7 @@ class AutoFocusBeh(py_trees.behaviour.Behaviour):
         time.sleep(2.0)
         self._sharpness_ready.wait(timeout=3.0)
         
-        self.node.get_logger().info(f"{self.name} Brent's iter at z_pos: {z}, sharpness: {self._last_sharpness}")
+        self.node.get_logger().info(f"{self.name} Brent's iter at z_pos: {z:.7f}, sharpness: {self._last_sharpness:.2f}")
         return -self._last_sharpness
         
     def _goal_response_cb(self, fut):

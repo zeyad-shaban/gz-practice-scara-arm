@@ -20,7 +20,7 @@
 
     <include>
       <uri>model://wafer</uri>
-      <pose>0 0 0.086 0 0 0</pose>
+      <pose>0 0 0.136 0 0 0</pose>
     </include>
 
     <model name='ground_plane'>

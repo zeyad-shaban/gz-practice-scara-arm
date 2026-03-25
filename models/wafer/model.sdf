@@ -1,134 +1,27 @@
 <?xml version="1.0"?>
-<sdf version="1.8">
-    <model name="wafer">
-        <pose>0 0 0.086 0 0 0</pose>
-        <link name="wafer_link">
+<sdf version="1.9">
+  <model name="wafer">
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>SiliconWafer.glb</uri>
+          </mesh>
+        </geometry>
+      </visual>
 
-        <!-- Wafer body -->
-        <visual name="wafer_body">
-            <geometry>
-            <cylinder>
-                <radius>0.05</radius>
-                <length>0.000525</length>
-            </cylinder>
-            </geometry>
-            <material>
-            <ambient>0.2 0.25 0.3 1</ambient>
-            <diffuse>0.3 0.35 0.4 1</diffuse>
-            <specular>0.8 0.8 0.9 1</specular>
-            </material>
-        </visual>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.0005</length>
+          </cylinder>
+        </geometry>
+      </collision>
 
-        <!-- Die grid lines — horizontal -->
-        <visual name="grid_h1"><pose>0 -0.03 0.0002 0 0 0</pose><geometry><box><size>0.09 0.0002 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_h2"><pose>0 -0.02 0.0002 0 0 0</pose><geometry><box><size>0.09 0.0002 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_h3"><pose>0 -0.01 0.0002 0 0 0</pose><geometry><box><size>0.09 0.0002 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_h4"><pose>0  0.00 0.0002 0 0 0</pose><geometry><box><size>0.09 0.0002 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_h5"><pose>0  0.01 0.0002 0 0 0</pose><geometry><box><size>0.09 0.0002 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_h6"><pose>0  0.02 0.0002 0 0 0</pose><geometry><box><size>0.09 0.0002 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_h7"><pose>0  0.03 0.0002 0 0 0</pose><geometry><box><size>0.09 0.0002 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-
-        <!-- Die grid lines — vertical -->
-        <visual name="grid_v1"><pose>-0.03 0 0.0002 0 0 0</pose><geometry><box><size>0.0002 0.09 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_v2"><pose>-0.02 0 0.0002 0 0 0</pose><geometry><box><size>0.0002 0.09 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_v3"><pose>-0.01 0 0.0002 0 0 0</pose><geometry><box><size>0.0002 0.09 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_v4"><pose> 0.00 0 0.0002 0 0 0</pose><geometry><box><size>0.0002 0.09 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_v5"><pose> 0.01 0 0.0002 0 0 0</pose><geometry><box><size>0.0002 0.09 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_v6"><pose> 0.02 0 0.0002 0 0 0</pose><geometry><box><size>0.0002 0.09 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-        <visual name="grid_v7"><pose> 0.03 0 0.0002 0 0 0</pose><geometry><box><size>0.0002 0.09 0.00005</size></box></geometry><material><ambient>0.5 0.5 0.5 1</ambient></material></visual>
-
-        <!-- Alignment marks — yellow crosses at each die corner intersection -->
-        <!-- Row -2 -->
-        <visual name="am_n2n2_h"><pose>-0.02 -0.02 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_n2n2_v"><pose>-0.02 -0.02 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_n2n1_h"><pose>-0.01 -0.02 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_n2n1_v"><pose>-0.01 -0.02 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_n2z0_h"><pose>0.00 -0.02 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_n2z0_v"><pose>0.00 -0.02 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_n2p1_h"><pose>0.01 -0.02 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_n2p1_v"><pose>0.01 -0.02 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_n2p2_h"><pose>0.02 -0.02 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_n2p2_v"><pose>0.02 -0.02 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <!-- Row -1 -->
-        <visual name="am_n1n2_h"><pose>-0.02 -0.01 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_n1n2_v"><pose>-0.02 -0.01 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_n1n1_h"><pose>-0.01 -0.01 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_n1n1_v"><pose>-0.01 -0.01 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_n1z0_h"><pose>0.00 -0.01 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_n1z0_v"><pose>0.00 -0.01 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_n1p1_h"><pose>0.01 -0.01 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_n1p1_v"><pose>0.01 -0.01 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_n1p2_h"><pose>0.02 -0.01 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_n1p2_v"><pose>0.02 -0.01 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <!-- Row 0 -->
-        <visual name="am_z0n2_h"><pose>-0.02 0.00 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_z0n2_v"><pose>-0.02 0.00 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_z0n1_h"><pose>-0.01 0.00 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_z0n1_v"><pose>-0.01 0.00 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_z0z0_h"><pose>0.00 0.00 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_z0z0_v"><pose>0.00 0.00 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_z0p1_h"><pose>0.01 0.00 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_z0p1_v"><pose>0.01 0.00 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_z0p2_h"><pose>0.02 0.00 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_z0p2_v"><pose>0.02 0.00 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <!-- Row +1 -->
-        <visual name="am_p1n2_h"><pose>-0.02 0.01 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_p1n2_v"><pose>-0.02 0.01 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_p1n1_h"><pose>-0.01 0.01 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_p1n1_v"><pose>-0.01 0.01 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_p1z0_h"><pose>0.00 0.01 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_p1z0_v"><pose>0.00 0.01 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_p1p1_h"><pose>0.01 0.01 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_p1p1_v"><pose>0.01 0.01 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_p1p2_h"><pose>0.02 0.01 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_p1p2_v"><pose>0.02 0.01 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <!-- Row +2 -->
-        <visual name="am_p2n2_h"><pose>-0.02 0.02 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_p2n2_v"><pose>-0.02 0.02 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_p2n1_h"><pose>-0.01 0.02 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_p2n1_v"><pose>-0.01 0.02 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_p2z0_h"><pose>0.00 0.02 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_p2z0_v"><pose>0.00 0.02 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_p2p1_h"><pose>0.01 0.02 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_p2p1_v"><pose>0.01 0.02 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <visual name="am_p2p2_h"><pose>0.02 0.02 0.0003 0 0 0</pose><geometry><box><size>0.002 0.0004 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-        <visual name="am_p2p2_v"><pose>0.02 0.02 0.0003 0 0 0</pose><geometry><box><size>0.0004 0.002 0.0001</size></box></geometry><material><ambient>0.9 0.9 0.1 1</ambient></material></visual>
-
-        <collision name="c">
-            <geometry>
-            <cylinder>
-                <radius>0.05</radius>
-                <length>0.000525</length>
-            </cylinder>
-            </geometry>
-        </collision>
-        <inertial>
-            <mass>0.01</mass>
-        </inertial>
-        </link>
-    </model>
+      <inertial>
+        <mass>0.01</mass>
+      </inertial>
+    </link>
+  </model>
 </sdf>

@@ -1,3 +1,5 @@
+STAGE_Z_BOUNDS = 0.025
+
 X_STAGE_NAME = 'base_x_stage_joint'
 Y_STAGE_NAME = 'x_y_stage_joint'
 Z_STAGE_NAME = 'y_z_stage_joint'
