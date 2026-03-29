@@ -72,16 +72,18 @@ class AutoAlignment(Node):
                 cv2.drawContours(visual_img, [largest_blob + top_left], -1, (0, 255, 0), 1)
                 
         marker_visible = len(contours) > 0
-        
-        alignment_x_meters = (marker_cx - img_cx) * microns_per_px if marker_visible else -1.0
-        alignment_y_meters = (marker_cy - img_cy) * microns_per_px if marker_visible else -1.0
-        
-        align_vec_msg = Vector3()
-        align_vec_msg.x = alignment_x_meters
-        align_vec_msg.y = alignment_y_meters
-        
-        self._correction_fac_pub.publish(align_vec_msg)
         self._marker_visible_pub.publish(Bool(data=marker_visible))
+        
+        if marker_visible:
+            alignment_x_meters = -(img_cx - marker_cx) * microns_per_px
+            alignment_y_meters = -(img_cy - marker_cy) * microns_per_px
+            
+            # notice the convention flipping, x is the forward which here is the y
+            align_vec_msg = Vector3()
+            align_vec_msg.y = alignment_x_meters
+            align_vec_msg.x = alignment_y_meters
+            
+            self._correction_fac_pub.publish(align_vec_msg)
 
 
         if self.debug_autoalignment:

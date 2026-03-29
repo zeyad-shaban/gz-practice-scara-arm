@@ -49,7 +49,6 @@ class AutoFocusNode(Node):
         sharpness = laplacian.var().item()
         
         self._sharpness_pub.publish(Float64(data=sharpness))
-
         
         if self._debug_autofocus:
             self._z_history.append(self._z_pos)

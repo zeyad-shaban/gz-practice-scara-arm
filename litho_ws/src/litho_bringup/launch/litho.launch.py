@@ -30,8 +30,8 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        DeclareLaunchArgument('debug_autofocus', default_value='false',
-                              description='Show autofocus debug window'),
+        DeclareLaunchArgument('debug_visuals', default_value='false',
+                              description='Show autofocus and Autoalignment debug window'),
         autofocus_node,
         autoalignment_node,
         brain_node,

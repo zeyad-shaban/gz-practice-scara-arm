@@ -1,4 +1,4 @@
-from litho_brain.constants import X_STAGE_NAME, Y_STAGE_NAME, STAGE_STABLE_TIMEOUT, STAGE_JOINT_NAMES, STAGE_Z_BOUNDS
+from litho_brain.constants import X_STAGE_NAME, Y_STAGE_NAME, STAGE_STABLE_TIMEOUT, STAGE_JOINT_NAMES, STAGE_Z_BOUNDS, Z_STAGE_NAME
 from rclpy.action.client import ActionClient, ClientGoalHandle, GoalStatus
 from control_msgs.action import FollowJointTrajectory
 from litho_brain.utils.movement_utils import build_goal
@@ -126,5 +126,3 @@ class AutoFocusBeh(py_trees.behaviour.Behaviour):
         
     def _goal_result_cb(self, fut):
         self._goal_done.set()
-
-
