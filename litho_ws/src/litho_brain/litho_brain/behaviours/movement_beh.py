@@ -205,9 +205,15 @@ class AutoAlignmentBeh(py_trees.behaviour.Behaviour):
         if self._failed:
             return Status.FAILURE
         
-        are_servers_ready = self._correction_vec_sub.get_publisher_count() > 0 and self._act_client.server_is_ready() and self._joints_sub.get_publisher_count() > 0
-        if not are_servers_ready or self._offset_x is None or self._offset_y is None or self._curr_x is None or self._curr_y is None or self._curr_z is None:
-            self.node.get_logger().warning(f"{self.name} waiting for servers to start...") # todo acutlly tell the servers required
+        if not self._correction_vec_sub.get_publisher_count() > 0:
+            self.node.get_logger().warning(f"{self.name} waiting for autoalignment/correction_vec to start...")
+        if not self._act_client.server_is_ready():
+            self.node.get_logger().warning(f"{self.name} waiting for /joint_trajectory_controller/follow_joint_trajectory to start...")
+        if not self._joints_sub.get_publisher_count() > 0:
+            self.node.get_logger().warning(f"{self.name} waiting for /joint_states to start...")
+            
+        if self._offset_x is None or self._offset_y is None or self._curr_x is None or self._curr_y is None or self._curr_z is None:
+            self.node.get_logger().warning(f"{self.name} waiting... some numbers are none......")
             return Status.RUNNING
         if self._moving:
             return Status.RUNNING

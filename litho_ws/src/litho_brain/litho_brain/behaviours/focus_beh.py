@@ -10,6 +10,7 @@ from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
 import threading
 import time
+import numpy as np
 
 
 class AutoFocusBeh(py_trees.behaviour.Behaviour):
@@ -91,6 +92,32 @@ class AutoFocusBeh(py_trees.behaviour.Behaviour):
         self._curr_pos_y = msg.position[y_idx]
         
     def _maximizer_worker(self):
+        self._coarse_and_fine_maximizer()
+        
+    def _coarse_and_fine_maximizer(self):
+        coarse = np.linspace(-STAGE_Z_BOUNDS, STAGE_Z_BOUNDS, 10)
+        best_z = -1
+        best_val = float('inf')
+        
+        for z in coarse:
+            val = self._sharpness_at_z(z)
+            if val < best_val:
+                best_val = val
+                best_z = z
+                
+        fine = np.linspace(best_z - 0.001, best_z + 0.001, 10)
+        
+        for z in fine:
+            val = self._sharpness_at_z(z)
+            if val < best_val:
+                best_val = val
+                best_z = z
+                
+        self._sharpness_at_z(best_z)
+        self.node.get_logger().info(f"best_z: {(best_z*1e3):.2f}mm, val: {best_val:.2f}")
+        self._maximizer_done = True
+        
+    def _brents_maximizer(self):
         result = minimize_scalar(
             self._sharpness_at_z,
             bounds=(-STAGE_Z_BOUNDS, STAGE_Z_BOUNDS),
@@ -116,7 +143,7 @@ class AutoFocusBeh(py_trees.behaviour.Behaviour):
         time.sleep(STAGE_STABLE_TIMEOUT)
         self._sharpness_ready.wait(timeout=3.0)
         
-        self.node.get_logger().info(f"{self.name} Brent's iter at z_pos: {z:.7f}, sharpness: {self._last_sharpness:.2f}")
+        self.node.get_logger().info(f"{self.name} z_pos: {z:.7f}, sharpness: {self._last_sharpness:.2f}")
         return -self._last_sharpness
         
     def _goal_response_cb(self, fut):

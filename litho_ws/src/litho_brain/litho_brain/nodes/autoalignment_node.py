@@ -54,8 +54,8 @@ class AutoAlignment(Node):
         
         marker_cx = -1
         marker_cy = -1
-        img_cx = visual_img.shape[1]/2
-        img_cy = visual_img.shape[0]/2
+        img_cx = img.shape[1]/2
+        img_cy = img.shape[0]/2
         microns_per_px = -1
         if contours:
             largest_blob = max(contours, key=cv2.contourArea)

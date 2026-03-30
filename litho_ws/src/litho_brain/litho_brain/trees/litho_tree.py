@@ -8,12 +8,12 @@ from rclpy.node import Node
 
 
 def get_root(node: Node):
-    root = py_trees.composites.Sequence(name='lol', memory=True)
+    root = Sequence(name='lol', memory=True)
     root.add_child(GoToOriginBeh('GoToOrigin', node))
     
     root.add_child(AutoFocusBeh('Auto focus', node))
     root.add_child(StageSettledBeh('WaitFocusStable', node))
-    dies = [{'some info about die i guess...'}]*25
+    dies = [{}]*25
     
     for i, die in enumerate(dies):
         root.add_child(AutoAlignmentBeh('Auto Alignment', node))
