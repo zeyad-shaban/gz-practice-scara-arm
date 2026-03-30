@@ -181,7 +181,7 @@ class GoToNextMarker(py_trees.behaviour.Behaviour):
             
 # todo the control system here fucken sucks, at least ad a feedback loop to update the values as we are going instead of overshooting this bdly
 class AutoAlignmentBeh(py_trees.behaviour.Behaviour):
-    def __init__(self, name: str, node: Node, min_thresh_micron=1):
+    def __init__(self, name: str, node: Node, min_thresh_micron=10):
         super().__init__(name) 
         self.node = node
         self._act_client = ActionClient(self.node, FollowJointTrajectory, '/joint_trajectory_controller/follow_joint_trajectory')
