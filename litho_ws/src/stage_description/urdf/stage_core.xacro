@@ -34,9 +34,10 @@
     <xacro:property name="z_stage_mass" value="0.05" />
     <xacro:property name="z_stage_lower" value="-0.05" />
     <xacro:property name="z_stage_upper" value="0.05" />
+    <xacro:property name="z_stage_safety_lim" value="0.005" />
 
 
-    <xacro:property name="stage_effort" value="100" /> <!-- N/m -->
+    <xacro:property name="stage_effort" value="9999999999999999" /> <!-- N/m -->
     <xacro:property name="stage_vel" value="0.1" /> <!-- m/s -->
 
     <!-- Base -->
@@ -196,7 +197,7 @@
         <parent link="y_stage_link" />
         <child link="z_stage_link" />
         <axis xyz="0 0 1" />
-        <limit lower="${z_stage_lower}" upper="${z_stage_upper}" effort="${stage_effort}"
+        <limit lower="${z_stage_lower + z_stage_safety_lim}" upper="${z_stage_upper - z_stage_safety_lim}" effort="${stage_effort}"
             velocity="${stage_vel}" />
     </joint>
 

@@ -11,11 +11,12 @@ def get_root(node: Node):
     root = Sequence(name='lol', memory=True)
     root.add_child(GoToOriginBeh('GoToOrigin', node))
     
+    root.add_child(AutoAlignmentBeh('Auto Alignment', node))
     root.add_child(AutoFocusBeh('Auto focus', node))
-    root.add_child(StageSettledBeh('WaitFocusStable', node))
     dies = [{}]*25
     
     for i, die in enumerate(dies):
+        root.add_child(StageSettledBeh('WaitMovementStable', node))
         root.add_child(AutoAlignmentBeh('Auto Alignment', node))
         root.add_child(StageSettledBeh('WaitMovementStable', node))
         # root.add_child(DLPExpose)

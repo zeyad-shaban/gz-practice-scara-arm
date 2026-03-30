@@ -21,9 +21,9 @@ class GoToOriginBeh(py_trees.behaviour.Behaviour):
         self._act_client = ActionClient(self.node, FollowJointTrajectory, '/joint_trajectory_controller/follow_joint_trajectory')
         
         self._orig_pos = [
-            -0.020048,
-            -0.020048,
-            0.017362,
+            -0.021000,
+            -0.023000,
+            -0.04,
         ]
         
     def initialise(self) -> None:
@@ -39,7 +39,7 @@ class GoToOriginBeh(py_trees.behaviour.Behaviour):
         if not self._started:
             self._started = True
             self._go_to_origin()
-            self.node.get_logger().info("WE STARTED TEH SEQUENCE")
+            self.node.get_logger().info("WE STARTED THE SEQUENCE")
             
         if self._failed:
             return Status.FAILURE
@@ -50,7 +50,7 @@ class GoToOriginBeh(py_trees.behaviour.Behaviour):
         return Status.SUCCESS
         
     def _go_to_origin(self):
-        goal = build_goal(STAGE_JOINT_NAMES, self._orig_pos, duration_sec=1, pos_tolerance=1e-6)
+        goal = build_goal(STAGE_JOINT_NAMES, self._orig_pos, duration_sec=1, pos_tolerance=10e-6)
         res_fut = self._act_client.send_goal_async(goal)
         res_fut.add_done_callback(self._response_cb)
     
@@ -62,7 +62,8 @@ class GoToOriginBeh(py_trees.behaviour.Behaviour):
             self._failed = True
             return
             
-        goal_handle.get_result_async().add_done_callback(self._result_cb)
+        fut = goal_handle.get_result_async()
+        fut.add_done_callback(self._result_cb)
         
     def _result_cb(self, fut):
         # result: FollowJointTrajectory.Result = fut.result().result
@@ -186,6 +187,8 @@ class AutoAlignmentBeh(py_trees.behaviour.Behaviour):
         self.node = node
         self._act_client = ActionClient(self.node, FollowJointTrajectory, '/joint_trajectory_controller/follow_joint_trajectory')
         
+        self._Kp = 0.3
+        self._max_step = 1e-3
         self._min_thresh_meters = min_thresh_micron*1e-6
         
     def initialise(self) -> None:
@@ -207,10 +210,13 @@ class AutoAlignmentBeh(py_trees.behaviour.Behaviour):
         
         if not self._correction_vec_sub.get_publisher_count() > 0:
             self.node.get_logger().warning(f"{self.name} waiting for autoalignment/correction_vec to start...")
+            return Status.RUNNING
         if not self._act_client.server_is_ready():
             self.node.get_logger().warning(f"{self.name} waiting for /joint_trajectory_controller/follow_joint_trajectory to start...")
+            return Status.RUNNING
         if not self._joints_sub.get_publisher_count() > 0:
             self.node.get_logger().warning(f"{self.name} waiting for /joint_states to start...")
+            return Status.RUNNING
             
         if self._offset_x is None or self._offset_y is None or self._curr_x is None or self._curr_y is None or self._curr_z is None:
             self.node.get_logger().warning(f"{self.name} waiting... some numbers are none......")
@@ -250,7 +256,18 @@ class AutoAlignmentBeh(py_trees.behaviour.Behaviour):
     def _start_moving(self):
         self.node.get_logger().info(f"{self.name} Starting moving x {self._offset_x:.6f} y {self._offset_y:.6f}")
         self._moving = True
-        positions: list[float] = [self._curr_x + self._offset_x, self._curr_y + self._offset_y, self._curr_z] # type: ignore
+        
+        dx = self._Kp*self._offset_x # type: ignore
+        dy = self._Kp*self._offset_y # type: ignore
+        mag = np.linalg.norm([dx, dy])
+        if mag >= self._max_step:
+            scale = self._max_step / mag
+            dx *= scale
+            dy *= scale
+            
+            
+        
+        positions: list[float] = [self._curr_x + dx, self._curr_y + dy, self._curr_z] # type: ignore
         goal = build_goal(STAGE_JOINT_NAMES, positions, duration_sec=1, pos_tolerance=self._min_thresh_meters/2)
         
         self._act_client.send_goal_async(goal).add_done_callback(self._response_callback)
